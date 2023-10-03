@@ -30,13 +30,13 @@ export const AppDataSource = new DataSource({
 });
 
 const addBaseStatuses = async () => {
-  const statuses = await getStatuses();
-  BASE_STATUSES.forEach((status) => {
-    const statusIndexFromDB = statuses.findIndex(
-      (s) => s.description === status
+  const dbStatuses = await getStatuses();
+  BASE_STATUSES.forEach((baseStatus) => {
+    const statusIndexFromDB = dbStatuses.findIndex(
+      (dbStatus) => dbStatus.description === baseStatus
     );
     if (statusIndexFromDB === -1) {
-      addStatus(status);
+      addStatus(baseStatus);
     }
   });
 };

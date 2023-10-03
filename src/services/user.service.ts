@@ -31,14 +31,28 @@ export const getAllUsersFromDB = async (
 
 export const getUserByNameFromDB = async (name: string) => {
   const userRepository = dataSource.getRepository(User);
-  const users = userRepository.find({ where: { name } });
-  return users;
+  const users = await userRepository.find({
+    where: { name },
+    relations: { status: true },
+  });
+  return [
+    users.map((user) => {
+      return { ...user, status: user.status.description };
+    }),
+  ];
 };
 
 export const getUserByEmailFromDB = async (email: string) => {
   const userRepository = dataSource.getRepository(User);
-  const users = userRepository.find({ where: { email } });
-  return users;
+  const users = await userRepository.find({
+    where: { email },
+    relations: { status: true },
+  });
+  return [
+    users.map((user) => {
+      return { ...user, status: user.status.description };
+    }),
+  ];
 };
 
 export const getUsersByIds = async (ids: number[]) => {
@@ -49,5 +63,5 @@ export const getUsersByIds = async (ids: number[]) => {
 
 export const updateUsersInDB = async (users: User[]) => {
   const userRepository = dataSource.getRepository(User);
-  userRepository.save(users);
+  await userRepository.save(users);
 };

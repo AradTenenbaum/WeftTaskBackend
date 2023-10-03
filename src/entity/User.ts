@@ -12,6 +12,7 @@ import { Status } from "./Status";
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
+  @Index()
   id: number;
 
   @Column({ nullable: false })

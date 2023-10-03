@@ -11,6 +11,8 @@ import {
 import { generateError } from "../utils/errors";
 import { isValidStatus } from "../validation/status";
 import { Status } from "../entity/Status";
+import { logObject } from "../utils/logs";
+import { ERROR } from "../utils/constants";
 
 export const addUser = async (req: Request, res: Response) => {
   try {
@@ -23,6 +25,7 @@ export const addUser = async (req: Request, res: Response) => {
     await addNewUserToDB(user);
     res.status(201).send({ message: "Success", user });
   } catch (error) {
+    logObject({ error }, ERROR);
     res.status(500).send(generateError("Something went wrong"));
   }
 };
@@ -46,6 +49,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
     const users = await getAllUsersFromDB(limit as string, offset as string);
     res.status(200).send({ message: "Success", users });
   } catch (error) {
+    logObject({ error }, ERROR);
     res.status(500).send(generateError("Something went wrong"));
   }
 };
@@ -56,6 +60,7 @@ export const getUserByName = async (req: Request, res: Response) => {
     const users = await getUserByNameFromDB(name);
     res.status(200).send({ message: "Success", users });
   } catch (error) {
+    logObject({ error }, ERROR);
     res.status(500).send(generateError("Something went wrong"));
   }
 };
@@ -65,7 +70,8 @@ export const getUserByEmail = async (req: Request, res: Response) => {
     const { email } = req.params;
     const users = await getUserByEmailFromDB(email);
     res.status(200).send({ message: "Success", users });
-  } catch (error) {
+  } catch (error: any) {
+    logObject({ error }, ERROR);
     res.status(500).send(generateError("Something went wrong"));
   }
 };
@@ -114,6 +120,7 @@ export const updateUsersStatuses = async (req: Request, res: Response) => {
 
     return res.status(200).send({ message: "Success" });
   } catch (error) {
+    logObject({ error }, ERROR);
     return res.status(500).send(generateError("Something went wrong"));
   }
 };
